@@ -118,13 +118,17 @@ public class PlayerController : MonoBehaviour
         Charge();
         Shoot();
         ChangeWeapon();
-        Die();
     }
 
     private void FixedUpdate()
     {
         Movement();
         Rotation();
+    }
+
+    private void LateUpdate()
+    {
+        Die();
     }
 
     public float GetPlayerHealth()
