@@ -21,4 +21,13 @@ public class BulletEnemyController : MonoBehaviour
         if (transform.position.x <= maxRange)
             Destroy(gameObject);    //Destroy the laser after it exceeds a certain range
     }
+
+    private void OnTriggerEnter(Collider col)
+    {
+        //If the player collides with ammunition, destroy the ammo and reduce the player's health by 1
+        if (col.gameObject.tag == "Player")
+        {
+            Destroy(gameObject);
+        }
+    }
 }

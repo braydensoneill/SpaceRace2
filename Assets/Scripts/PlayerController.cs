@@ -71,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
         //Passive healing variables
         healAmount = 1f;
-        healFrequency = 0.4f;
+        healFrequency = 0.15f;
 
         //Max Ammo Variables
         maxOrangeAmmo = 5;
@@ -98,7 +98,7 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         //Player Info Variables
-        playerHealth = 100;
+        playerHealth = maxPlayerHealth;
         playerSpeed = 35;
 
         //Player Weapon Variables
@@ -125,6 +125,11 @@ public class PlayerController : MonoBehaviour
     {
         Movement();
         Rotation();
+    }
+
+    public float GetPlayerHealth()
+    {
+        return playerHealth;
     }
 
     public int GetCurrentOrangeAmmo()
@@ -413,8 +418,8 @@ public class PlayerController : MonoBehaviour
         //If the player collides with ammunition, destroy the ammo and reduce the player's health by 1
         if (col.gameObject.tag == "Ammunition")
         {
-            Destroy(col.gameObject);
-            playerHealth = playerHealth - 20;
+            col.gameObject.SetActive(false);
+            playerHealth -= 60;
         }
 
         //If the player collides with an enemy, destroy the enemy and reduce the player's health to zero
