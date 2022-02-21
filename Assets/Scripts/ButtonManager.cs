@@ -1,7 +1,9 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 using TMPro;
+using System.IO;
 
 public class ButtonManager : MonoBehaviour
 {
@@ -17,7 +19,6 @@ public class ButtonManager : MonoBehaviour
 
     public GameObject player;
 
-    private int currentGreenAmmo;
     private int currentOrangeAmmo;
     private int currentCyanAmmo;
     private int currentPinkAmmo;
@@ -44,18 +45,23 @@ public class ButtonManager : MonoBehaviour
 
     public void UpdateGreenAmmo()
     {
-        currentGreenAmmo = 99;
         greenButtonText.text = "MAX";
     }
     public void UpdateOrangeAmmo()
     {
         currentOrangeAmmo = player.GetComponent<PlayerController>().GetCurrentOrangeAmmo();
+        orangeButton.GetComponent<RawImage>().color = new Color32(255, 120, 0, 255);
+        orangeButtonText.faceColor = new Color32(255, 120, 0, 255);
 
         if (currentOrangeAmmo == maxOrangeAmmo)
             orangeButtonText.text = "MAX";
 
         else if (currentOrangeAmmo == 0)
-            orangeButtonText.text = "EMPTY";
+        {
+            orangeButtonText.text = "0";
+            orangeButton.GetComponent<RawImage>().color = new Color32(255, 120, 0, 50);
+            orangeButtonText.faceColor = new Color32(255, 120, 0, 50);
+        }
 
         else
             orangeButtonText.text = currentOrangeAmmo.ToString();
@@ -64,12 +70,18 @@ public class ButtonManager : MonoBehaviour
     public void UpdateCyanAmmo()
     {
         currentCyanAmmo = player.GetComponent<PlayerController>().GetCurrentCyanAmmo();
+        cyanButton.GetComponent<RawImage>().color = new Color32(0, 255, 255, 255);
+        cyanButtonText.faceColor = new Color32(0, 255, 255, 255);
 
         if (currentCyanAmmo == maxCyanAmmo)
             cyanButtonText.text = "MAX";
 
         else if (currentCyanAmmo == 0)
-            cyanButtonText.text = "EMPTY";
+        {
+            cyanButtonText.text = "0";
+            cyanButton.GetComponent<RawImage>().color = new Color32(0, 255, 255, 50);
+            cyanButtonText.faceColor = new Color32(0, 255, 255, 50);
+        }
 
         else
             cyanButtonText.text = currentCyanAmmo.ToString();
@@ -78,12 +90,18 @@ public class ButtonManager : MonoBehaviour
     public void UpdatePinkAmmo() 
     {
         currentPinkAmmo = player.GetComponent<PlayerController>().GetCurrentPinkAmmo();
+        pinkButton.GetComponent<RawImage>().color = new Color32(255, 0, 255, 255);
+        pinkButtonText.faceColor = new Color32(255, 0, 255, 255);
 
         if (currentPinkAmmo == maxPinkAmmo)
             pinkButtonText.text = "MAX";
 
         else if (currentPinkAmmo == 0)
-            pinkButtonText.text = "EMPTY";
+        {
+            pinkButtonText.text = "0";
+            pinkButton.GetComponent<RawImage>().color = new Color32(255, 0, 255, 50);
+            pinkButtonText.faceColor = new Color32(255, 0, 255, 50);
+        }
 
         else
             pinkButtonText.text = currentPinkAmmo.ToString();

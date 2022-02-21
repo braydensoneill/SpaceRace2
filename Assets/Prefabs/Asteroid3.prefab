@@ -97,8 +97,8 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.4589282
-  m_Center: {x: 0, y: 0, z: 0.023958605}
+  m_Radius: 0.839752
+  m_Center: {x: 0, y: 0, z: 0.017443022}
 --- !u!114 &4251629497006964624
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -112,7 +112,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 20
-  maxRange: 0
+  maxRangeLeft: 0
+  maxRangeRight: 0
   moveDirection: 0
   bounceAngle: 0
   currentXAngle: 0
@@ -177,15 +178,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4034890402696284, guid: 32f3a0c748d309c42b4aa860d4cc92aa, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -0.10221614
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4034890402696284, guid: 32f3a0c748d309c42b4aa860d4cc92aa, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.028666496
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4034890402696284, guid: 32f3a0c748d309c42b4aa860d4cc92aa, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.17700002
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4034890402696284, guid: 32f3a0c748d309c42b4aa860d4cc92aa, type: 3}
       propertyPath: m_LocalRotation.w

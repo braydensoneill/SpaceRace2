@@ -51,7 +51,7 @@ public class ScoreManager : MonoBehaviour
         score = GetScore();
 
         scoreText.text = score.ToString();  //Text of score during game
-        gameOverScoreText.text = "Score: " + score.ToString();  //Text of Score on gameOver screen
+        gameOverScoreText.text = score.ToString();  //Text of Score on gameOver screen
 
         UpdateHighscore();  //Check for new highscore every time score increases
     }
