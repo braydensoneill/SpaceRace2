@@ -15,10 +15,20 @@ public class ScoreManager : MonoBehaviour
     private int score;   //Current Score
     private int highscore;   //Highest Score
 
+    // Variables for writing to file
+    private StreamWriter writer;
+    private string filePath;
+    private string fileName;
+
     //Awake is called as the scene starts
     private void Awake()    //This will allow you to instantly access this code from any other script
     {
         instance = this;
+
+        // Variables for writing to file
+        fileName = "scores.txt";
+        filePath = Application.persistentDataPath + "/" + fileName;
+        writer = new StreamWriter(filePath, true);
 
         LoadHighScore();
     }
@@ -51,7 +61,7 @@ public class ScoreManager : MonoBehaviour
         score = GetScore();
 
         scoreText.text = score.ToString();  //Text of score during game
-        gameOverScoreText.text = score.ToString();  //Text of Score on gameOver screen
+        gameOverScoreText.text = ("Score: ") + score.ToString();  //Text of Score on gameOver screen
 
         UpdateHighscore();  //Check for new highscore every time score increases
     }
@@ -66,6 +76,13 @@ public class ScoreManager : MonoBehaviour
 
             PlayerPrefs.SetInt("Highscore", highscore); //Save the new Highscore so it can be used after closing/restarting the game
         }
+    }
+
+    public void SaveScore()
+    {
+        writer.WriteLine(score);
+        writer.Flush();
+        writer.Close();
     }
 
     public void ResetScore()

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
@@ -59,15 +60,18 @@ public class PlayerController : MonoBehaviour
     private int minZBoundary;
     private int maxZBoundary;
 
-    //Timer variables
+    // Timer variables
     private float afterDeathTimer;
     private float healTimer;
     [SerializeField] private float fireRateTimer;
 
-    //GUI references
+    // GUI references
     public GameObject topHUD;
     public GameObject centreHUD;
     public GameObject bottomHUD;
+
+    // Variables for writing to file
+    ScoreManager scoreScript;
 
     private void Awake()
     {
@@ -97,6 +101,9 @@ public class PlayerController : MonoBehaviour
         afterDeathTimer = 0;
         fireRateTimer = 0f;
         healTimer = 0f;
+
+        // Variables for writing to file
+        scoreScript = FindObjectOfType<ScoreManager>();
     }
 
     // Start is called before the first frame update
@@ -410,30 +417,18 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
-        float secondsToWait = 2;
-
         if (IsAlive() == false)
         {
-            gameObject.SetActive(false);    //Destroy the player
-            //Charge(afterDeathTimer);    //Start a timer after the player dies
-            //Debug.Log("HELLO2");
+            // Save the player's score to a text file
+            scoreScript.SaveScore();
+
+            // Disable the player
+            gameObject.SetActive(false);
 
             // Disable the player's HUD on death
             topHUD.SetActive(false);
             bottomHUD.SetActive(false);
             centreHUD.SetActive(true);
-
-            /*
-            afterDeathTimer += Time.deltaTime; //start the timer
-
-            //If the timer reaches a certain value, freeze the game and the 
-            if (afterDeathTimer > secondsToWait)
-            {
-                //Debug.Log("HELLO3");
-                // Eneable the death screen on death
-                centreHUD.SetActive(true);
-            }
-            */ 
         }
     }
 
