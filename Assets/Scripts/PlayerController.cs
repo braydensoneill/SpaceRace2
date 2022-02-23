@@ -45,7 +45,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private int maxPinkAmmo;
     [SerializeField] private int maxCyanAmmo;
 
-    [SerializeField] private float fireRateTimer;
     [SerializeField] private int currentWeapon;
     [SerializeField] private float weaponFireRate;
 
@@ -60,9 +59,15 @@ public class PlayerController : MonoBehaviour
     private int minZBoundary;
     private int maxZBoundary;
 
-    //Other variables
+    //Timer variables
     private float afterDeathTimer;
     private float healTimer;
+    [SerializeField] private float fireRateTimer;
+
+    //GUI references
+    public GameObject topHUD;
+    public GameObject centreHUD;
+    public GameObject bottomHUD;
 
     private void Awake()
     {
@@ -118,6 +123,7 @@ public class PlayerController : MonoBehaviour
         Charge();
         Shoot();
         ChangeWeapon();
+        Debug.Log("Player Health: " + playerHealth);
     }
 
     private void FixedUpdate()
@@ -404,16 +410,30 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
-        float secondsToWait = 3;
+        float secondsToWait = 2;
 
         if (IsAlive() == false)
         {
-            Destroy(gameObject);    //Destroy the player
+            gameObject.SetActive(false);    //Destroy the player
             //Charge(afterDeathTimer);    //Start a timer after the player dies
+            //Debug.Log("HELLO2");
+
+            // Disable the player's HUD on death
+            topHUD.SetActive(false);
+            bottomHUD.SetActive(false);
+            centreHUD.SetActive(true);
+
+            /*
+            afterDeathTimer += Time.deltaTime; //start the timer
 
             //If the timer reaches a certain value, freeze the game and the 
-            if(afterDeathTimer > secondsToWait)
-                Time.timeScale = 0;
+            if (afterDeathTimer > secondsToWait)
+            {
+                //Debug.Log("HELLO3");
+                // Eneable the death screen on death
+                centreHUD.SetActive(true);
+            }
+            */ 
         }
     }
 

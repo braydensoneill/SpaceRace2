@@ -337,7 +337,7 @@ GameObject:
   m_Component:
   - component: {fileID: 219737638}
   m_Layer: 5
-  m_Name: TopAnchor
+  m_Name: TopHUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -445,34 +445,10 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
-      - m_Target: {fileID: 933401704}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
+      - m_Target: {fileID: 933401706}
+        m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
+        m_MethodName: MainMenu
+        m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
@@ -1372,13 +1348,14 @@ GameObject:
   m_Component:
   - component: {fileID: 933401705}
   - component: {fileID: 933401706}
+  - component: {fileID: 933401707}
   m_Layer: 5
-  m_Name: ExitScreen
+  m_Name: DeathScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &933401705
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1406,6 +1383,18 @@ RectTransform:
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &933401706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 933401704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0efca7450aaac4f9ffc01ed45d6690, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &933401707
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1764,7 +1753,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1079961121
 RectTransform:
   m_ObjectHideFlags: 0
@@ -1778,7 +1767,7 @@ RectTransform:
   m_Children:
   - {fileID: 933401705}
   m_Father: {fileID: 1420045065}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -2851,8 +2840,8 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 219737638}
-  - {fileID: 2025550442}
   - {fileID: 1079961121}
+  - {fileID: 2025550442}
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3144,7 +3133,7 @@ GameObject:
   - component: {fileID: 1949915521}
   - component: {fileID: 1949915520}
   m_Layer: 5
-  m_Name: ConfirmButton
+  m_Name: ReplayButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3215,7 +3204,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 933401706}
         m_TargetAssemblyTypeName: MenuScript, Assembly-CSharp
-        m_MethodName: ExitGame
+        m_MethodName: PlayGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -3270,7 +3259,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2025550442}
   m_Layer: 5
-  m_Name: BottomAnchor
+  m_Name: BottomHUD
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -3290,7 +3279,7 @@ RectTransform:
   - {fileID: 1373466258}
   - {fileID: 1901258230}
   m_Father: {fileID: 1420045065}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0}
   m_AnchorMax: {x: 0.5, y: 0}
@@ -3565,6 +3554,18 @@ PrefabInstance:
       propertyPath: bullet
       value: 
       objectReference: {fileID: 6931406168380750911, guid: 8394cc50088f4f8459e2e703a11e8de2, type: 3}
+    - target: {fileID: 3377654431203791480, guid: 84663892847a9e743aed7bf6e383a371, type: 3}
+      propertyPath: topHUD
+      value: 
+      objectReference: {fileID: 219737637}
+    - target: {fileID: 3377654431203791480, guid: 84663892847a9e743aed7bf6e383a371, type: 3}
+      propertyPath: bottomHUD
+      value: 
+      objectReference: {fileID: 2025550441}
+    - target: {fileID: 3377654431203791480, guid: 84663892847a9e743aed7bf6e383a371, type: 3}
+      propertyPath: centreHUD
+      value: 
+      objectReference: {fileID: 1079961120}
     - target: {fileID: 3377654431203791480, guid: 84663892847a9e743aed7bf6e383a371, type: 3}
       propertyPath: cyanBullet
       value: 

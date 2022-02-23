@@ -97,11 +97,6 @@ public class AsteroidController : MonoBehaviour
             Destroy(col.gameObject);
         }
 
-        if (col.gameObject.tag == "Player")
-        {
-            Destroy(col.gameObject);
-        }
-
         if (col.gameObject.tag == "Enemy")
         {
             Destroy(col.gameObject);

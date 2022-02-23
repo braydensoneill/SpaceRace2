@@ -13,7 +13,8 @@ public class HealthBar : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        currentHealth = player.GetComponent<PlayerController>().GetPlayerHealth();
+        if(player.activeSelf)
+            currentHealth = player.GetComponent<PlayerController>().GetPlayerHealth();
         newBarScale = currentHealth / 28.57f;
 
         bar.transform.localScale = new Vector3(

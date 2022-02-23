@@ -64,12 +64,6 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Player")
-        {
-            Destroy(col.gameObject);
-            Destroy(gameObject);
-        }
-
         if (col.gameObject.tag == "Asteroid")
         {
             Destroy(col.gameObject);

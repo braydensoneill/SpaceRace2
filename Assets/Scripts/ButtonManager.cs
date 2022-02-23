@@ -37,10 +37,14 @@ public class ButtonManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        UpdateGreenAmmo();
-        UpdateOrangeAmmo();
-        UpdateCyanAmmo();
-        UpdatePinkAmmo();
+        //Check if the player is alive
+        if (player.activeSelf)
+        {
+            UpdateGreenAmmo();
+            UpdateOrangeAmmo();
+            UpdateCyanAmmo();
+            UpdatePinkAmmo();
+        }
     }
 
     public void UpdateGreenAmmo()
