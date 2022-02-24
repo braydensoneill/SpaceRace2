@@ -18,7 +18,7 @@ public class RepulsorPlayerController : MonoBehaviour
     void Start()
     {
         speed = 30;
-        maxRange = 40;
+        maxRange = 20;
     }
 
     // Update is called once per frame
@@ -31,6 +31,7 @@ public class RepulsorPlayerController : MonoBehaviour
     private void Travel()
     {
         transform.Translate(Vector3.right * Time.deltaTime * speed);  //Shoot laser forward from player
+
     }
 
     private void CheckOutOfBounds()

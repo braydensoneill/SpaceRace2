@@ -16,14 +16,23 @@ public class BulletPlayerController : MonoBehaviour
     void Start()
     {
         speed = 75;
-        maxRange = 40;
+        maxRange = 20;
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * speed);  //Shoot laser forward from player
+        Move();
 
+        CheckOutOfBounds();
+    }
+    private void Move()
+    {
+        transform.Translate(Vector3.right * Time.deltaTime * speed);  //Shoot laser forward from player
+    }
+
+    private void CheckOutOfBounds()
+    {
         if (transform.position.x >= maxRange)
             Destroy(gameObject);    //Destroy the laser after it exceeds a certain range
     }

@@ -258,7 +258,7 @@ public class PlayerController : MonoBehaviour
 
     void ShootOrange()
     {
-        float bulletSpread = 10f;    //Angle of shotgun bullet spread
+        float bulletSpread = 2.5f;    //Angle of shotgun bullet spread
         weaponFireRate = fireRateOrange;   //Change the player's current fire rate to the shotgun's fire rate
 
         //Use the bullet spread variable to change the Y rotation of each bullet being shot

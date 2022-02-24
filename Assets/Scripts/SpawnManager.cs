@@ -58,7 +58,7 @@ public class SpawnManager : MonoBehaviour
         System.Random rand = new System.Random();
 
         Vector3 enemyPosition;
-        float xPosition = 45f;
+        float xPosition = 55f;
         float yPosition = 0.5f;
         float zPosition = rand.Next(minZBoundary, maxZBoundary);
 
