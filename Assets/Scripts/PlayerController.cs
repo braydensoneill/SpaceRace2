@@ -16,7 +16,7 @@ public class PlayerController : MonoBehaviour
     //Player Info Variables
     private float maxPlayerHealth;
     [SerializeField] private float playerHealth;
-    [SerializeField] private int playerSpeed;
+    [SerializeField] private float playerSpeed;
 
     //Variables used for passive healing
     private float healAmount;
@@ -111,7 +111,7 @@ public class PlayerController : MonoBehaviour
     {
         //Player Info Variables
         playerHealth = maxPlayerHealth;
-        playerSpeed = 35;
+        playerSpeed = 30 * PlayerPrefs.GetFloat("sensitivity"); ;
 
         //Player Weapon Variables
         currentWeapon = (int)Weapons.green;

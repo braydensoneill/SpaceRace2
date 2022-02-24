@@ -97,7 +97,7 @@ LightmapSettings:
     m_ExportTrainingData: 0
     m_TrainingDataDestination: TrainingData
     m_LightProbeSampleCountMultiplier: 4
-  m_LightingDataAsset: {fileID: 0}
+  m_LightingDataAsset: {fileID: 112000000, guid: 7d2db949f747f044ebaae728e7f71823, type: 2}
   m_LightingSettings: {fileID: 4890085278179872738, guid: c006ca7be262a334db48e9cf7b547b4c, type: 2}
 --- !u!196 &4
 NavMeshSettings:
@@ -1122,51 +1122,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 23}
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &584956102
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 584956103}
-  - component: {fileID: 584956104}
-  m_Layer: 0
-  m_Name: SettingsManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &584956103
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 584956102}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 87.90287, y: 144.5826, z: -44.68344}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 6
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &584956104
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 584956102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 79c4fbc8841b0454d92b421f1d62a1e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  volumeSlider: {fileID: 1315057759}
-  sensitivitySlider: {fileID: 1355767725}
 --- !u!1 &586557979
 GameObject:
   m_ObjectHideFlags: 0
@@ -1892,6 +1847,7 @@ GameObject:
   - component: {fileID: 915305256}
   - component: {fileID: 915305255}
   - component: {fileID: 915305254}
+  - component: {fileID: 915305257}
   m_Layer: 5
   m_Name: ExitButton
   m_TagString: Untagged
@@ -2033,6 +1989,18 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 915305252}
   m_CullTransparentMesh: 1
+--- !u!114 &915305257
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 915305252}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0efca7450aaac4f9ffc01ed45d6690, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &969078711
 GameObject:
   m_ObjectHideFlags: 0
@@ -2153,6 +2121,7 @@ GameObject:
   m_Component:
   - component: {fileID: 993970492}
   - component: {fileID: 993970493}
+  - component: {fileID: 993970494}
   m_Layer: 5
   m_Name: HomeScreen
   m_TagString: Untagged
@@ -2182,6 +2151,18 @@ RectTransform:
   m_SizeDelta: {x: 100, y: 100}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &993970493
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 993970491}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe0efca7450aaac4f9ffc01ed45d6690, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &993970494
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2813,6 +2794,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1315057758}
   - component: {fileID: 1315057759}
+  - component: {fileID: 1315057760}
   m_Layer: 5
   m_Name: VolumeSlider
   m_TagString: Untagged
@@ -2892,7 +2874,32 @@ MonoBehaviour:
   m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1315057760}
+        m_TargetAssemblyTypeName: MenuVolumeSlider, Assembly-CSharp
+        m_MethodName: ChangeVolume
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1315057760
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1315057757}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6e6efcfc20a63b94a9af8533ea45236b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  volumeSlider: {fileID: 1315057759}
 --- !u!1 &1348122714
 GameObject:
   m_ObjectHideFlags: 0
@@ -2975,6 +2982,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1355767724}
   - component: {fileID: 1355767725}
+  - component: {fileID: 1355767726}
   m_Layer: 5
   m_Name: SensitivitySlider
   m_TagString: Untagged
@@ -3048,13 +3056,38 @@ MonoBehaviour:
   m_FillRect: {fileID: 1798734172}
   m_HandleRect: {fileID: 1609354912}
   m_Direction: 0
-  m_MinValue: 0
-  m_MaxValue: 1
+  m_MinValue: 0.5
+  m_MaxValue: 1.5
   m_WholeNumbers: 0
   m_Value: 0.5
   m_OnValueChanged:
     m_PersistentCalls:
-      m_Calls: []
+      m_Calls:
+      - m_Target: {fileID: 1355767726}
+        m_TargetAssemblyTypeName: MenuSensitivitySlider, Assembly-CSharp
+        m_MethodName: ChangeSensitivity
+        m_Mode: 1
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+--- !u!114 &1355767726
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1355767723}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 75f9e8d9c899a544ea1084b6ba27295d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sensitivitySlider: {fileID: 1355767725}
 --- !u!1 &1389514443
 GameObject:
   m_ObjectHideFlags: 0
