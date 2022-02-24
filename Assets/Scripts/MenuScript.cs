@@ -14,7 +14,7 @@ public class MenuScript : MonoBehaviour
 
     public void Start()
     {
-        AudioListener.volume = PlayerPrefs.GetFloat("musicVolume");
+        AudioListener.volume = PlayerPrefs.GetFloat("volume");
     }
 
     public void MainMenu()
