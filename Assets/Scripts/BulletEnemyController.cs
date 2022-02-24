@@ -29,5 +29,12 @@ public class BulletEnemyController : MonoBehaviour
         {
             Destroy(gameObject);
         }
+
+        //If the player collides with ammunition, destroy the ammo and reduce the player's health by 1
+        if (col.gameObject.tag == "Asteroid" && 
+            gameObject.name == "BulletEnemyPink(Clone)")
+        {
+            Destroy(col.gameObject);
+        }
     }
 }

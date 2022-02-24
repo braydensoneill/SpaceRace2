@@ -179,11 +179,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3830973bb75c9c644bf1477f886ab737, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cannonLeft: {fileID: 1117592299080577766}
+  cannonFrontLeft: {fileID: 1117592297669479928}
   cannonFront: {fileID: 1117592299584980858}
+  cannonFrontRight: {fileID: 1117592297914460844}
+  cannonRight: {fileID: 1117592299752929767}
   bullet: {fileID: 1898019475438657491, guid: 1840d0194c82c8845a2be71fc496ce8d, type: 3}
   speed: 0
   maxRange: 0
-  chargeTimer: 0
+  fireRateTimer: 0
   weaponFireRate: 0
 --- !u!135 &4955735170806021743
 SphereCollider:

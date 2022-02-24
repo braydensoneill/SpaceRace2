@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8156586821985514575}
   - component: {fileID: 3897712331588890318}
   - component: {fileID: 443878480377754538}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BulletOrange
   m_TagString: Ammunition
   m_Icon: {fileID: 0}

@@ -30,7 +30,7 @@ public class AsteroidController : MonoBehaviour
     {
         moveDirection = (int)Direction.Forward;
         maxRangeLeft = -20;
-        maxRangeRight = 50;
+        maxRangeRight = 60;
 
         bounceAngle = 12.5f;
         collisionRotationSmoothness = 1;

@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 3017293493950315372}
   - component: {fileID: 5745961199936532295}
   - component: {fileID: -3264158483772132487}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BulletCyan
   m_TagString: Ammunition
   m_Icon: {fileID: 0}
