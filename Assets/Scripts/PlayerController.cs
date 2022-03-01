@@ -5,6 +5,7 @@ using System.IO;
 
 public class PlayerController : MonoBehaviour
 {
+    //Enum containing each weapon type
     enum Weapons
     {
         green = 1,
@@ -61,7 +62,6 @@ public class PlayerController : MonoBehaviour
     private int maxZBoundary;
 
     // Timer variables
-    private float afterDeathTimer;
     private float healTimer;
     [SerializeField] private float fireRateTimer;
 
@@ -72,6 +72,15 @@ public class PlayerController : MonoBehaviour
 
     // Variables for writing to file
     ScoreManager scoreScript;
+
+    //Variables for sound effects
+    public float volume;
+    private AudioSource playerAudio;
+    public AudioClip laserSound;
+    public AudioClip explosionSound;
+
+    // Variables used for particle effects
+    public ParticleSystem explosionParticle;
 
     private void Awake()
     {
@@ -98,12 +107,15 @@ public class PlayerController : MonoBehaviour
         maxZBoundary = 7;
 
         //Timer variables
-        afterDeathTimer = 0;
         fireRateTimer = 0f;
         healTimer = 0f;
 
         // Variables for writing to file
         scoreScript = FindObjectOfType<ScoreManager>();
+
+        // Variables for sound effects
+        playerAudio = GetComponent<AudioSource>();
+        volume = PlayerPrefs.GetFloat("volume");
     }
 
     // Start is called before the first frame update
@@ -111,7 +123,7 @@ public class PlayerController : MonoBehaviour
     {
         //Player Info Variables
         playerHealth = maxPlayerHealth;
-        playerSpeed = 30 * PlayerPrefs.GetFloat("sensitivity"); ;
+        playerSpeed = 30 * PlayerPrefs.GetFloat("sensitivity"); //Default sensitivity is 30, but is changed based on playerPref value
 
         //Player Weapon Variables
         currentWeapon = (int)Weapons.green;
@@ -125,23 +137,22 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        FindInputValues();
-        PassiveHeal(healAmount, healFrequency);
-        Charge();
-        Shoot();
-        ChangeWeapon();
-        Debug.Log("Player Health: " + playerHealth);
+        FindInputValues();                      // Find the values used for player input
+        PassiveHeal(healAmount, healFrequency); // Every x seconds, heal for x 
+        Shoot();                                // Allow the player to shoot
+        Charge();                               // Check if enough time has passed since the last shot
+        ChangeWeapon();                         // Allow the player to switch guns
     }
 
     private void FixedUpdate()
     {
-        Movement();
-        Rotation();
+        Movement(); // The player can move up and down within the game's boundaries
+        Rotation(); // The player's sprite swivels when the player moves
     }
 
     private void LateUpdate()
     {
-        Die();
+        Die();  // Check of the player has dies at the end of each frame
     }
 
     public float GetPlayerHealth()
@@ -192,32 +203,39 @@ public class PlayerController : MonoBehaviour
 
     private void Movement()
     {
+        // Move the player up/down based on player input and speed
         transform.Translate(Vector3.forward * Time.deltaTime * playerSpeed * verticalInput);
 
-        if (transform.position.z < minZBoundary)    //If the player goes too far up
+        // Prevent the player from moving past the top boundary
+        if (transform.position.z < minZBoundary)
             transform.position = new Vector3(transform.position.x, transform.position.y, minZBoundary);
 
-        if (transform.position.z > maxZBoundary)    //If the player goes to far down
+        // Prevent the player from moving past the bottom boundary
+        if (transform.position.z > maxZBoundary)
             transform.position = new Vector3(transform.position.x, transform.position.y, maxZBoundary);
      }
 
     public void Rotation()
     {
+        // Use a variables that determine how intentively the player rotates
         float rotationStrength = 50.0f;
 
+        // Create a new Quaternion that holds the players rotation based on certain parameters
         Quaternion playerSpriteRotation = Quaternion.Euler(
             playerSprite.transform.rotation.x + (verticalInput * rotationStrength),
             playerSprite.transform.rotation.y,
             playerSprite.transform.rotation.z); ;
 
+        // Set the player's rotation to this new Quaternion value
         playerSprite.transform.rotation = playerSpriteRotation;
     }
 
     private bool CheckShootKeybind()
     {
-        if ((Input.GetMouseButton(0)) ||
-            (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) ||
-            (Input.GetKey(KeyCode.Space)))
+        // Check if the player wanted to shoot their weapon
+        if ((Input.GetMouseButton(0)) ||                                                // Did the player press the mouse button?
+            (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began) ||    // Did the player touch the screen?
+            (Input.GetKey(KeyCode.Space)))                                              // Did the player press space bar?
         {
             return true;
         }
@@ -245,21 +263,35 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    private void ShootAudio()
+    {
+        // Play a laser sound
+        playerAudio.PlayOneShot(laserSound, volume * 1.3f);
+    }
+
     private void ShootGreen()
     {
+        // Change the player's fire rate to the fire rate of their respective weapon
         weaponFireRate = fireRateGreen;
 
+        // Check if enough time has passed since the last shot
         if (ReadyToShoot(weaponFireRate))
         {
-            Instantiate(greenBullet, cannonFront.transform.position, transform.rotation);  //create new object with Laser prefab from left cannon
+            // Play the Audio of the laser being shot
+            ShootAudio();
+
+            // Create a new object with Laser prefab from the left cannon
+            Instantiate(greenBullet, cannonFront.transform.position, transform.rotation);
+
+            // Reset the timer of the gun's fire rate
             fireRateTimer = 0;
         }
     }
 
     void ShootOrange()
     {
-        float bulletSpread = 2.5f;    //Angle of shotgun bullet spread
-        weaponFireRate = fireRateOrange;   //Change the player's current fire rate to the shotgun's fire rate
+        float bulletSpread = 2.5f;          //Angle of shotgun bullet spread
+        weaponFireRate = fireRateOrange;    //Change the player's current fire rate to the shotgun's fire rate
 
         //Use the bullet spread variable to change the Y rotation of each bullet being shot
         Quaternion leftBulletRotation = Quaternion.Euler(
@@ -282,21 +314,24 @@ public class PlayerController : MonoBehaviour
             transform.rotation.y + bulletSpread/2,
             transform.rotation.z);
 
-        //Check if enough time has passed since the last shot and if there is enough ammo
+        // Check if enough time has passed since the last shot and if there is enough ammo
         if (ReadyToShoot(weaponFireRate) && (currentOrangeAmmo > 0))
         {
-            //From each cannon used by this weapon, create a new object from the ammo's prefab, with the correct rotation
+            // Play the Audio of the laser being shot
+            ShootAudio();
+
+            // From each cannon used by this weapon, create a new object from the ammo's prefab, with the correct rotation
             Instantiate(orangeBullet, cannonLeft.transform.position, leftBulletRotation);
             Instantiate(orangeBullet, cannonFrontLeft.transform.position, frontLeftBulletRotation);
             Instantiate(orangeBullet, cannonFront.transform.position, transform.rotation);
             Instantiate(orangeBullet, cannonRight.transform.position, rightBulletRotation);
             Instantiate(orangeBullet, cannonFrontRight.transform.position, frontRightBulletRotation);
 
-            currentOrangeAmmo--; //reduce the amount of ammo in the shotgun
-            fireRateTimer = 0;    //reset the timer used for the fire rate
+            currentOrangeAmmo--;    // Reduce the amount of ammo in the orange gun
+            fireRateTimer = 0;      // Reset the timer used for the fire rate
         }
 
-        //Change to the green weapon if you run out of this weapon's ammo while shotting it
+        // Change to the green weapon if you run out of this weapon's ammo while shotting it
         else if (currentOrangeAmmo <= 0)
         {
             UseGreenWeapon();
@@ -305,14 +340,20 @@ public class PlayerController : MonoBehaviour
 
     void ShootPink()
     {
+        // Change the player's fire rate to the fire rate of their respective weapon
         weaponFireRate = fireRatePink;
 
+        // Check if enough time has passed since the last shot and if the player has enough ammo
         if (ReadyToShoot(weaponFireRate) && (currentPinkAmmo > 0))
         {
-            Instantiate(pinkBullet, cannonFront.transform.position, transform.rotation);  //create new object with Laser prefab from left cannon
+            // Play the Audio of the laser being shot
+            ShootAudio();
 
-            currentPinkAmmo--;
-            fireRateTimer = 0;
+            // Create new object with Laser prefab from left cannon
+            Instantiate(pinkBullet, cannonFront.transform.position, transform.rotation);
+
+            currentPinkAmmo--;      // Reduce the amount of ammo in the pink gun
+            fireRateTimer = 0;      // Reset the timer used for the fire rate
         }
 
         //Change to the green weapon if you run out of this weapon's ammo while shotting it
@@ -324,15 +365,26 @@ public class PlayerController : MonoBehaviour
 
     void ShootCyan()
     {
+        // Change the player's fire rate to the fire rate of their respective weapon
         weaponFireRate = fireRateCyan;
 
+        // Too many lasers to play the sound for each, play it only sometimes one is shot
+        System.Random rand = new System.Random();
+        int randNumber = rand.Next(1,7);
+
+        // Check if enought time has passed since the last shot and if the player has enough ammo
         if (ReadyToShoot(weaponFireRate) && (currentCyanAmmo > 0))
         {
-            Instantiate(cyanBullet, cannonLeft.transform.position, transform.rotation);  //create new object with Laser prefab from left cannon
-            Instantiate(cyanBullet, cannonRight.transform.position, transform.rotation);  //create new object with Laser prefab from left cannon
+            //Play the Audio of the laser being shot, but dont play it too often
+            if(randNumber == 3)
+                ShootAudio();
 
-            currentCyanAmmo--;
-            fireRateTimer = 0;
+            //create new object with Laser prefab from left cannon
+            Instantiate(cyanBullet, cannonLeft.transform.position, transform.rotation);
+            Instantiate(cyanBullet, cannonRight.transform.position, transform.rotation);
+
+            currentCyanAmmo--;      // Reduce the amount of ammo in the cyan gun
+            fireRateTimer = 0;      // Reset the timer used for the fire rate
         }
 
         //Change to the green weapon if you run out of this weapon's ammo while shotting it
@@ -344,11 +396,12 @@ public class PlayerController : MonoBehaviour
 
     private void Charge()
     {
-        fireRateTimer += Time.deltaTime; //start the timer
+        fireRateTimer += Time.deltaTime;    // Start a timer
     }
 
     private bool ReadyToShoot(float rate)
     {
+        // Check if the timer exceeded the player's fire rate
         if (fireRateTimer >= rate)
             return true;
         else
@@ -357,26 +410,27 @@ public class PlayerController : MonoBehaviour
 
     public void UseGreenWeapon()
     {
-        currentWeapon = (int)Weapons.green;
+        currentWeapon = (int)Weapons.green; // Switch to the green weapon
     }
 
     public void UseOrangeWeapon()
     {
-        currentWeapon = (int)Weapons.orange;
+        currentWeapon = (int)Weapons.orange;    // Switch to the orange weapon
     }
 
     public void UsePinkWeapon()
     {
-        currentWeapon = (int)Weapons.pink;
+        currentWeapon = (int)Weapons.pink;  // Switch to the pink weapon
     }
 
     public void UseCyanWeapon()
     {
-        currentWeapon = (int)Weapons.cyan;
+        currentWeapon = (int)Weapons.cyan;  // Switch to the cyan weapon
     }
 
-    //This is only neccessary when testing on computer
-    //The buttons for phone will direct straight to the Use functions
+    /*This is only neccessary when playing on computer
+    You can press the 1,2,3,4 keybinds to change weapon
+    (Both pc and mobile can also use the buttons on the GUI)*/
     private void ChangeWeapon()
     {
         if (Input.GetKeyDown(KeyCode.Alpha1))
@@ -392,23 +446,30 @@ public class PlayerController : MonoBehaviour
             UseCyanWeapon();
     }
 
-    //Passiely heal 5hp every [x] seconds
+    //Passiely heal a certain amount every x seconds
     private void PassiveHeal(float amount, float frequency)
     {
+        // Start a timer
         healTimer += Time.deltaTime;
 
+        // Check if the timer has passed the frequency while the player is still alive
         if (healTimer >= frequency && IsAlive() == true)
         {
+            // Heal the player
             playerHealth = playerHealth + amount;
 
+            // Don't heal past the player's maximum possbile health
             if (playerHealth >= maxPlayerHealth)
                 playerHealth = maxPlayerHealth;
+
+            // Reset the timer
             healTimer = 0;
         }
     }
 
     private bool IsAlive()
     {
+        // Check is the player has more than 0 health
         if (playerHealth > 0)
             return true;
         else
@@ -417,10 +478,15 @@ public class PlayerController : MonoBehaviour
 
     private void Die()
     {
+        // Check if the player is dead
         if (IsAlive() == false)
         {
             // Save the player's score to a text file
             scoreScript.SaveScore();
+
+            //Play the effects of the player exploding
+            playerAudio.PlayOneShot(explosionSound, volume * 20f);
+            explosionParticle.Play();
 
             // Disable the player
             gameObject.SetActive(false);
@@ -434,45 +500,45 @@ public class PlayerController : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        //If the player collides with ammunition, destroy the ammo and reduce the player's health by 1
-        if (col.gameObject.tag == "Ammunition")
+        // Check if the player collided with any ammunition or repulsors
+        if (col.gameObject.tag == "Ammunition" || col.gameObject.tag == "Repulsor")
         {
-            col.gameObject.SetActive(false);
-            playerHealth -= 60;
+            Destroy(col.gameObject);    // Destory collider
+            playerHealth -= 60;         // Update the player's health
         }
 
-        //If the player collides with an enemy, destroy the enemy and reduce the player's health to zero
+        // Check if the player collided with an enemy
         if (col.gameObject.tag == "Enemy")
         {
-            Destroy(col.gameObject);
-            playerHealth = 0;
+            Destroy(col.gameObject);    // Destroy collider
+            playerHealth = 0;           // Update the player's health
         }
 
-        //If the player collides with an asteroid, reduce the player's health to zero
+        // Check if the player collided with an asteroid
         if (col.gameObject.tag == "Asteroid")
         {
-            playerHealth = 0;
+            playerHealth = 0;   // Update the player's health
         }
 
-        //If the player collides with the shotgun pickup, replenish the respective weapon's ammo
+        // Check if the player collided with the orange pickup
         if (col.gameObject.tag == "PickupOrange")
         {
-            Destroy(col.gameObject);
-            currentOrangeAmmo = maxOrangeAmmo;
+            Destroy(col.gameObject);            // Destory collider
+            currentOrangeAmmo = maxOrangeAmmo;  // Replenish respectice ammo
         }
 
-        //If the player collides with the laser pickup, replenish the respective weapon's ammo
+        // Check if the player collided with the pink pickup
         if (col.gameObject.tag == "PickupPink")
         {
-            Destroy(col.gameObject);
-            currentPinkAmmo = maxPinkAmmo;
+            Destroy(col.gameObject);        // Destory the pickup
+            currentPinkAmmo = maxPinkAmmo;  // Replenish respective ammo
         }
 
-        //If the player collides with the repulsor pickup, replenish the respective weapon's ammo
+        // Check if the player collided with the cyan pickup
         if (col.gameObject.tag == "PickupCyan")
         {
-            Destroy(col.gameObject);
-            currentCyanAmmo = maxCyanAmmo;
+            Destroy(col.gameObject);        // Destroy the pickup
+            currentCyanAmmo = maxCyanAmmo;  // Replenish respective ammo
         }
     }
 }

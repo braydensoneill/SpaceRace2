@@ -19,7 +19,21 @@ public class EnemyController : MonoBehaviour
     [SerializeField] private float weaponFireRate;
     private float fireRate;
 
+    // Variables for effects sound effects
+    public float volume;
+    private AudioSource enemyAudio;
+    public AudioClip laserSound;
+    public AudioClip explosionSound;
 
+    // Variables used for particle effects
+    public ParticleSystem explosionParticle;
+
+    private void Awake()
+    {
+        // Variables for sound effects
+        enemyAudio = GetComponent<AudioSource>();
+        volume = PlayerPrefs.GetFloat("volume");
+    }
     private void Start()
     {
         speed = 12.5f;
@@ -32,14 +46,20 @@ public class EnemyController : MonoBehaviour
     {
         Timer();
 
-        if (gameObject.name == "EnemyOrange(Clone)")
+        if (gameObject.name == "EnemyOrange(Clone)" || gameObject.name == "EnemyOrange")
+        {
             ShootOrange();
+        }
 
-        else if (gameObject.name == "EnemyPink(Clone)")
+        else if (gameObject.name == "EnemyPink(Clone)" || gameObject.name == "EnemyPink")
+        {
             ShootNormal();
+        }
 
         else
+        {
             ShootNormal();
+        }
     }
 
     // Update is called once per frame
@@ -51,10 +71,21 @@ public class EnemyController : MonoBehaviour
             Destroy(gameObject);    //Destroy the laser after it exceeds a certain range
     }
 
+    private void ShootAudio()
+    {
+        enemyAudio.PlayOneShot(laserSound, volume * 1.3f);
+    }
+
+    private void ExplosionAudio()
+    {
+        enemyAudio.PlayOneShot(explosionSound, volume * 20f);
+    }
+
     private void ShootNormal()
     {
         if (ReadyToShoot(fireRate))
         {
+            ShootAudio();
             Instantiate(bullet, cannonFront.transform.position, transform.rotation);  //create new object with Laser prefab from left cannon
             fireRateTimer = 0;
         }
@@ -87,6 +118,8 @@ public class EnemyController : MonoBehaviour
 
         if (ReadyToShoot(fireRate))
         {
+            ShootAudio();
+
             //From each cannon used by this weapon, create a new object from the ammo's prefab, with the correct rotation
             Instantiate(bullet, cannonLeft.transform.position, leftBulletRotation);
             Instantiate(bullet, cannonFrontLeft.transform.position, frontLeftBulletRotation);
@@ -112,10 +145,18 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Asteroid")
+        if(col.gameObject.tag == "Asteroid")
         {
-            Destroy(col.gameObject);
-            Destroy(gameObject);
+            explosionParticle.Play();
+            ExplosionAudio();
+            gameObject.SetActive(false);
+        }
+
+        if(col.gameObject.tag == "Ammunition" || col.gameObject.tag == "Repulsor")
+        {
+            explosionParticle.Play();
+            ExplosionAudio();
+            gameObject.SetActive(false);
         }
     }
 }

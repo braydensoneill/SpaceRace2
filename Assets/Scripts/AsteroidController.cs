@@ -11,61 +11,85 @@ public class AsteroidController : MonoBehaviour
         Down = 2
     }
 
+    // Asteroid Info variables
     public float speed;
+    public int moveDirection;
+
+    // Boundary variables
     [SerializeField] private float maxRangeLeft;
     [SerializeField] private float maxRangeRight; //Some astroids may end up going right after collisions
-    public int moveDirection;
-    [SerializeField] private float bounceAngle;
 
+    // Angles
     [SerializeField] private float currentXAngle;
     [SerializeField] private float currentYAngle;
     [SerializeField] private float currentZAngle;
 
+    // Bounce variables
+    [SerializeField] private float bounceAngle;
     private Quaternion bounceUpRotation;
     private Quaternion bounceDownRotation;
-
     private float collisionRotationSmoothness;
 
+    //Variables for sound effects
+    public float volume;
+    private AudioSource asteroidAudio;
+    public AudioClip explosionSound;
+
+    // Variables used for particle effects
+    public ParticleSystem explosionParticle;
+
+    private void Awake()
+    {
+        // Variables for sound effects
+        asteroidAudio = GetComponent<AudioSource>();
+        volume = PlayerPrefs.GetFloat("volume");
+    }
     private void Start()
     {
-        moveDirection = (int)Direction.Forward;
-        maxRangeLeft = -20;
-        maxRangeRight = 60;
+        moveDirection = (int)Direction.Forward; // When spawned, move forward
+        maxRangeLeft = -20;                     // Set boundary
+        maxRangeRight = 60;                     // Set boundary
 
-        bounceAngle = 12.5f;
-        collisionRotationSmoothness = 1;
+        bounceAngle = 12.5f;                    // Set the angle that the asteroid changes when they bounce
+        collisionRotationSmoothness = 1;        // Set how smooth the rotate to their new angle when they bounce
     }
 
     private void Update()
     {
-        currentXAngle = transform.rotation.eulerAngles.x;
+        // Update angles
+        currentXAngle = transform.rotation.eulerAngles.x; 
         currentYAngle = transform.rotation.eulerAngles.y;
         currentZAngle = transform.rotation.eulerAngles.z;
     }
+
     // Update is called once per frame
     void FixedUpdate()
     {
-        Travel();
-        CheckOutOfBounds();
+        Travel();           // Move the asteroid
+        CheckOutOfBounds(); // Check if the asteroid is out of bounds
     }
 
     private void Travel()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * speed);  //Shoot laser forward from player
+        // Always move foward
+        transform.Translate(Vector3.right * Time.deltaTime * speed);
     }
 
     private void CheckRotation()
     {
+        // Change the rotation to this if it was the top asteroid
         bounceUpRotation = Quaternion.Euler(
             transform.rotation.eulerAngles.x,
             transform.rotation.eulerAngles.y + bounceAngle,
             transform.rotation.eulerAngles.z);
 
+        // Change the rotation to this if it was the bottom asteroid
         bounceDownRotation = Quaternion.Euler(
             transform.rotation.eulerAngles.x,
             transform.rotation.eulerAngles.y - bounceAngle,
             transform.rotation.eulerAngles.z);
 
+        // Swict to the appropriate angle, the default will ensure nothing is changed
         switch (moveDirection)
         {
             case (int)Direction.Up:
@@ -81,34 +105,65 @@ public class AsteroidController : MonoBehaviour
         }
     }
 
+    private void ExplosionAudio()
+    {
+        // Play the explosion sound
+        asteroidAudio.PlayOneShot(explosionSound, volume * 2);
+    }
+
     private void CheckOutOfBounds()
     {
+        // Destroy the asteroid if it went too far to the left
         if (transform.position.x <= maxRangeLeft)
-            Destroy(gameObject);    //Destroy the laser after it exceeds a certain range
+            Destroy(gameObject);
 
+        // Destroy the asteroid if it went too far to the right
         if (transform.position.x >= maxRangeRight)
             Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider col)
     {
+        // Check if the asteroid collided with ammunition
         if (col.gameObject.tag == "Ammunition")
         {
-            Destroy(col.gameObject);
+            col.gameObject.SetActive(false);    // Disable the collider
         }
 
+        // Check if the asteroid collided with repulsor
+        if (col.gameObject.tag == "Repulsor")
+        {
+            explosionParticle.Play();           // Play an explosion particle
+            ExplosionAudio();                   // Play an explosion sound
+            gameObject.SetActive(false);        // Disable the asteroid
+            col.gameObject.SetActive(false);    // Disable the collider
+        }
+
+        // Check if the asteroid collided with an enemy
         if (col.gameObject.tag == "Enemy")
         {
-            Destroy(col.gameObject);
+            ExplosionAudio();                   // Play an explosion sound
+            col.gameObject.SetActive(false);    // Disable the collider
         }
 
+        // Check if the asteroid collided with a player
+        if (col.gameObject.tag == "Player")
+        {
+            //Disable the player in it's own script
+            ExplosionAudio();   // Play an explosion sound
+        }
+
+        // Check if the asteroid collided with another asteroid
         if (col.gameObject.tag == "Asteroid")
         {
+            // If this asteroid is above the other astroid, bounce up
             if(transform.position.z > col.transform.position.z)
             {
                 moveDirection = (int)Direction.Up;
                 CheckRotation();
             }
+
+            // If this asteroid is below the other asteroid, bounce down
             else
             {
                 moveDirection = (int)Direction.Down;

@@ -47,14 +47,8 @@ public class BulletPlayerController : MonoBehaviour
 
         if (col.gameObject.tag == "Enemy")
         {
-            //gameObject.tag = "Untagged";
-            //destroyed = true;
-            //obstacleSprite.GetComponent<Renderer>().enabled = false;    
-
+            Debug.Log("SUIIIIII");
             score.AddScore(1); //score is added when an obstacle is destroyed
-            //explosionParticle.Play();   //play the explostion particle effect at the position of the destoyed obstacle
-            //obstacleAudio.PlayOneShot(explosionSound, volume);
-            Destroy(col.gameObject);    //Destroy the laser on collision
             Destroy(gameObject);
         }
     }
