@@ -4,21 +4,24 @@ using UnityEngine;
 
 public class MissileLauncherPackController : MonoBehaviour
 {
+    // Pickup variables
     private float speed;
     private float maxRange;
 
     private void Start()
     {
-        speed = 12.5f;
-        maxRange = -20;
+        speed = 12.5f;  // Set the speed of the pickup
+        maxRange = -20; // Set the max range of the pickup
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * speed);  //Shoot laser forward from player
+        // Always move forward
+        transform.Translate(Vector3.right * Time.deltaTime * speed);
 
+        // Destroy the pickup if it exceeds its boundaries
         if (transform.position.x <= maxRange)
-            Destroy(gameObject);    //Destroy the laser after it exceeds a certain range
+            Destroy(gameObject);
     }
 }

@@ -6,41 +6,46 @@ public class SpawnManager : MonoBehaviour
 {
     System.Random rand = new System.Random();
 
+    // List of all possible prefabs that can spawn
     public GameObject[] enemyPrefabs;
 
+    // Boundary variables
     private int minZBoundary;
     private int maxZBoundary;
 
+    // Spawn variables
     [SerializeField] private float spawnTimer;
     [SerializeField] private float spawnRate;
 
     // Start is called before the first frame update
     void Start()
     {
-        spawnTimer = 0;
-        spawnRate = 0.40f;
+        spawnTimer = 0;     // Set the starting value of the timer
+        spawnRate = 0.40f;  // Set how frequently objects spawn
 
-        minZBoundary = -7;
-        maxZBoundary = 7;
+        minZBoundary = -7;  // Set the min Z boundary
+        maxZBoundary = 7;   // Set the max Z boundary
     }
 
     // Update is called once per frame
     void Update()
     {
-        Timer();
-        Spawn();
+        Timer();    // Keep the a timer ticking
+        Spawn();    // Spawn a random object
     }
 
     private void Spawn()
     {
+        // Check if the timer is ready spawn an object
         if(ReadyToSpawn(spawnRate))
         {
+            // Instantiate an object at random from the list of prefabs
             Instantiate(
                 enemyPrefabs[RandomIndex()], //spawn a random one of the rock prefabs
                 randomPosition(),   //spawn the obstacle in a random position within the boundries
-                enemyPrefabs[RandomIndex()].transform.rotation);   //set the rotation of the obstacle ///TBD
+                enemyPrefabs[RandomIndex()].transform.rotation);   //set the rotation of the obstacle
             
-            spawnTimer = 0;
+            spawnTimer = 0; // Reset the timer
         }
     }
 
@@ -48,7 +53,8 @@ public class SpawnManager : MonoBehaviour
     {
         int index;
 
-        index = rand.Next(0, enemyPrefabs.Length); //index is a random number between 0 and the length of the array
+        //index is a random number between 0 and the length of the array
+        index = rand.Next(0, enemyPrefabs.Length);
 
         return index;
     }
@@ -57,6 +63,7 @@ public class SpawnManager : MonoBehaviour
     {
         System.Random rand = new System.Random();
 
+        // Variables to hold the random object's position
         Vector3 enemyPosition;
         float xPosition = 55f;
         float yPosition = 0.5f;
@@ -78,6 +85,7 @@ public class SpawnManager : MonoBehaviour
 
     private bool ReadyToSpawn(float rate)
     {
+        // Check if the timer exceeds the spawn rate
         if (spawnTimer >= rate)
             return true;
         else

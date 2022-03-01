@@ -5,7 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class MenuScript : MonoBehaviour
 {
-    //Add more here if you want to add extra scenes
+    // Enum contain possible scenes
     enum MenuOptions
     {
         Menu = 0,
@@ -14,21 +14,25 @@ public class MenuScript : MonoBehaviour
 
     public void Start()
     {
+        // Set the volume to the saved volume from the previous session
         AudioListener.volume = PlayerPrefs.GetFloat("volume");
     }
 
     public void MainMenu()
     {
+        // Play the menu scene
         SceneManager.LoadScene((int)MenuOptions.Menu);
     }
 
     public void PlayGame()
     {
+        // Play the PlayGame scene
         SceneManager.LoadScene((int)MenuOptions.Play);
     }
 
     public void ExitGame()
     {
+        // Exit the game
         Application.Quit();
     }
 }

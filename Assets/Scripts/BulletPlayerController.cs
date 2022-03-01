@@ -4,52 +4,55 @@ using UnityEngine;
 
 public class BulletPlayerController : MonoBehaviour
 {
+    // Bullet info variables
     ScoreManager score;
     private float speed;
     private float maxRange;
 
     void Awake()
     {
-        score = FindObjectOfType<ScoreManager>();
+        score = FindObjectOfType<ScoreManager>();   // Used to reference the score manager
     }
 
     void Start()
     {
-        speed = 75;
-        maxRange = 20;
+        speed = 75;     // Set the speed of the bullet
+        maxRange = 20;  // Set the max range the bullet can travel
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Move();
-
-        CheckOutOfBounds();
+        Move();             // Move the bullet
+        CheckOutOfBounds(); // Check if the bullet is out of bounds
     }
     private void Move()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * speed);  //Shoot laser forward from player
+        // Always move the bullet forward
+        transform.Translate(Vector3.right * Time.deltaTime * speed);
     }
 
     private void CheckOutOfBounds()
     {
+        // Destroy the bullet if it exceeds its boundaries
         if (transform.position.x >= maxRange)
-            Destroy(gameObject);    //Destroy the laser after it exceeds a certain range
+            Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider col)
     {
-        if (col.gameObject.tag == "Ammunition")
+        // Check if the bullet collided with another ammunition
+        if (col.gameObject.tag == "Ammunition" || col.gameObject.tag == "Repulsor")
         {
-            Destroy(col.gameObject);
-            Destroy(gameObject);
+            Destroy(col.gameObject);    // Destroy the collider
+            Destroy(gameObject);        // Destroy the bullet
         }
 
+        // Check if the bullet collided with the enemy
         if (col.gameObject.tag == "Enemy")
         {
-            Debug.Log("SUIIIIII");
-            score.AddScore(1); //score is added when an obstacle is destroyed
-            Destroy(gameObject);
+            score.AddScore(1);      // Add to the player's score
+            Destroy(gameObject);    // Destroy the bullet
         }
     }
 }

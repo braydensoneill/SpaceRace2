@@ -4,80 +4,63 @@ using UnityEngine;
 
 public class RepulsorPlayerController : MonoBehaviour
 {
+    // Repulsor variables
     ScoreManager score;
-
     private float force;
     private float speed;
     private float maxRange;
 
     private void Awake()
     {
+        // Allows reference to ScoreManager scipt
         score = FindObjectOfType<ScoreManager>();
     }
 
     void Start()
     {
-        speed = 30;
-        maxRange = 20;
+        speed = 30;     // Set the speed of the repulsor
+        maxRange = 20;  // Set the max range of the repulsor
     }
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        Travel();
-        CheckOutOfBounds();
+        Travel();           // Move the repulsor
+        CheckOutOfBounds(); // Check if it out of bounds
     }
 
     private void Travel()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * speed);  //Shoot laser forward from player
-
+        // Always move forward
+        transform.Translate(Vector3.right * Time.deltaTime * speed);
     }
 
     private void CheckOutOfBounds()
     {
+        // Destroy the repulsor when it exceeds the boundary
         if (transform.position.x >= maxRange)
-            Destroy(gameObject);    //Destroy the laser after it exceeds a certain range
-    }
-
-    //This does not work Properly. I can't find/manipulate the rotation of a collider
-    private void Repulse(Collider col)
-    {
-        Quaternion repulsedObjectRotation = Quaternion.Euler(
-                col.transform.rotation.eulerAngles.x,
-                col.transform.rotation.eulerAngles.y - 180,
-                col.transform.rotation.eulerAngles.z);
-
-        col.transform.rotation = repulsedObjectRotation;
+            Destroy(gameObject);
     }
 
     private void OnTriggerEnter(Collider col)
     {
+        // Check if the projectile collides with ammunition
         if (col.gameObject.tag == "Ammunition")
         {
-            Destroy(col.gameObject);
+            Destroy(col.gameObject);    // Destroy the collider
         }
 
+        // Check if the projectile collides with an asteroid
         if (col.gameObject.tag == "Asteroid")
         {
-            Destroy(col.gameObject);
+            Destroy(col.gameObject);    // Destroy the collider
         }
 
-        if (col.gameObject.tag == "Asteroid")
-        {
-            Destroy(col.gameObject);
-        }
-
+        // Check if the projectile collides with an enemy
         if (col.gameObject.tag == "Enemy")
         {
-            //gameObject.tag = "Untagged";
-            //destroyed = true;
-            //obstacleSprite.GetComponent<Renderer>().enabled = false;    
-
-            score.AddScore(1); //score is added when an obstacle is destroyed
-            //explosionParticle.Play();   //play the explostion particle effect at the position of the destoyed obstacle
-            //obstacleAudio.PlayOneShot(explosionSound, volume);
-            Destroy(col.gameObject);    //Destroy the laser on collision
+            score.AddScore(1);          // Add to players score
+            Destroy(col.gameObject);    // Destroy the collider
         }
     }
 }

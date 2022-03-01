@@ -8,11 +8,11 @@ public class ScoreManager : MonoBehaviour
 {
     public static ScoreManager instance;
 
-    public TextMeshProUGUI scoreText;   //Displayed during game
-    public TextMeshProUGUI highScoreText;   //Displayed on gameOver screen
+    public TextMeshProUGUI scoreText;           //Displayed during game
+    public TextMeshProUGUI highScoreText;       //Displayed on gameOver screen
     public TextMeshProUGUI gameOverScoreText;   //Displayed on gameOver screen
 
-    private int score;   //Current Score
+    private int score;      //Current Score
     private int highscore;   //Highest Score
 
     // Variables for writing to file
@@ -30,45 +30,48 @@ public class ScoreManager : MonoBehaviour
         filePath = Application.persistentDataPath + "/" + fileName;
         writer = new StreamWriter(filePath, true);
 
+        // Load the players highscore
         LoadHighScore();
     }
 
     // Start is called before the first frame update
     void Start()
     {
-        //Time.timeScale = 1;
-        score = 0;
+        score = 0;  // Reset the score
     }
 
     // Update is called once per frame
     void Update()
     {
-        UpdateScore();
-        UpdateHighscore();
+        UpdateScore();      // Update the score value/text
+        UpdateHighscore();  // Update the highscore value/text
     }
 
     private void LoadHighScore()
     {
+        // Check if there is a highscore playerpref saved from previous sessions
         if (PlayerPrefs.HasKey("Highscore"))
         {
-            highscore = PlayerPrefs.GetInt("Highscore");
-            highScoreText.text = "Highscore: " + highscore.ToString();
+            highscore = PlayerPrefs.GetInt("Highscore");                // Update PlayerPref
+            highScoreText.text = "Highscore: " + highscore.ToString();  // Update Text
         }
     }
 
     public void UpdateScore()
     {
+        // Update the score value
         score = GetScore();
 
-        scoreText.text = score.ToString();  //Text of score during game
-        gameOverScoreText.text = ("Score: ") + score.ToString();  //Text of Score on gameOver screen
+        scoreText.text = score.ToString();  // Update text
+        gameOverScoreText.text = ("Score: ") + score.ToString();  // Update text for game-over screen
 
         UpdateHighscore();  //Check for new highscore every time score increases
     }
 
     public void UpdateHighscore()
     {
-        if (score > highscore)   //If the player beats the highscore
+        // Check ff the player beats the highscore
+        if (score > highscore)
         {
             highscore = score;  //Set the new highscore
 
@@ -80,6 +83,7 @@ public class ScoreManager : MonoBehaviour
 
     public void SaveScore()
     {
+        // Write the data a text file
         writer.WriteLine(score);
         writer.Flush();
         writer.Close();

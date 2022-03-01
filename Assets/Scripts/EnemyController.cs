@@ -4,17 +4,19 @@ using UnityEngine;
 
 public class EnemyController : MonoBehaviour
 {
+    // Cannon Positions
     public GameObject cannonLeft;
     public GameObject cannonFrontLeft;
     public GameObject cannonFront;
     public GameObject cannonFrontRight;
     public GameObject cannonRight;
 
+    // Bullet prefab
     public GameObject bullet;
 
+    // Enemy info variables 
     [SerializeField] private float speed;
     [SerializeField] private float maxRange;
-
     [SerializeField] private float fireRateTimer;
     [SerializeField] private float weaponFireRate;
     private float fireRate;
@@ -36,26 +38,30 @@ public class EnemyController : MonoBehaviour
     }
     private void Start()
     {
-        speed = 12.5f;
-        maxRange = -20;
-
-        fireRate = 2.15f;
+        speed = 12.5f;      // Set the speed of the enemy
+        maxRange = -20;     // Set the max range of the enemy
+        fireRate = 2.15f;   // Set the fire rate of the enemy
     }
 
     private void Update()
     {
-        Timer();
+        Charge();    // Used for checking if enough time has passed between shot
 
+        // Check if the enemy is orange
         if (gameObject.name == "EnemyOrange(Clone)" || gameObject.name == "EnemyOrange")
         {
+            // Shoot the orange weapon
             ShootOrange();
         }
 
+        // Check if the enemy is pink
         else if (gameObject.name == "EnemyPink(Clone)" || gameObject.name == "EnemyPink")
         {
+            // Shoot the pink weapon (uses shootNormal but will shoot the pink ammo attached to the enemy 
             ShootNormal();
         }
 
+        // Or else shoot the normal weapon
         else
         {
             ShootNormal();
@@ -65,35 +71,40 @@ public class EnemyController : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        transform.Translate(Vector3.right * Time.deltaTime * speed);  //Shoot laser forward from player
+        // Always move forward
+        transform.Translate(Vector3.right * Time.deltaTime * speed);
 
+        // Destroy the enemy if it has exceeded its boundaries
         if (transform.position.x <= maxRange)
-            Destroy(gameObject);    //Destroy the laser after it exceeds a certain range
+            Destroy(gameObject);
     }
 
     private void ShootAudio()
     {
+        // Play the laser sound
         enemyAudio.PlayOneShot(laserSound, volume * 1.3f);
     }
 
     private void ExplosionAudio()
     {
+        // Play the explosion sound
         enemyAudio.PlayOneShot(explosionSound, volume * 20f);
     }
 
     private void ShootNormal()
     {
+        // Check if the enemy is ready to shoot
         if (ReadyToShoot(fireRate))
         {
-            ShootAudio();
-            Instantiate(bullet, cannonFront.transform.position, transform.rotation);  //create new object with Laser prefab from left cannon
-            fireRateTimer = 0;
+            ShootAudio();       // Play the shoot audio
+            Instantiate(bullet, cannonFront.transform.position, transform.rotation);  //create new object with bullet prefab from left cannon
+            fireRateTimer = 0;  //reset the timer
         }
     }
 
     private void ShootOrange()
     {
-        float bulletSpread = 2.5f;    //Angle of shotgun bullet spread
+        float bulletSpread = 2.5f;    //Angle of orange bullet spread
 
         //Use the bullet spread variable to change the Y rotation of each bullet being shot
         Quaternion leftBulletRotation = Quaternion.Euler(
@@ -116,8 +127,10 @@ public class EnemyController : MonoBehaviour
             transform.rotation.y - 180 + bulletSpread / 2,
             transform.rotation.z);
 
+        // Checl if the enemy is ready to shoot
         if (ReadyToShoot(fireRate))
         {
+            // Play the shoot audio
             ShootAudio();
 
             //From each cannon used by this weapon, create a new object from the ammo's prefab, with the correct rotation
@@ -130,13 +143,14 @@ public class EnemyController : MonoBehaviour
         }
     }
 
-    private void Timer()
+    private void Charge()
     {
-        fireRateTimer += Time.deltaTime; //start the timer
+        fireRateTimer += Time.deltaTime; // Start a timer
     }
 
     private bool ReadyToShoot(float rate)
     {
+        // Check if the timer has exceed the fire rate
         if (fireRateTimer >= rate)
             return true;
         else
@@ -145,18 +159,20 @@ public class EnemyController : MonoBehaviour
 
     private void OnTriggerEnter(Collider col)
     {
+        // Check if the enemy collided with an asteroid
         if(col.gameObject.tag == "Asteroid")
         {
-            explosionParticle.Play();
-            ExplosionAudio();
-            gameObject.SetActive(false);
+            explosionParticle.Play();       // Play the explosion particle 
+            ExplosionAudio();               // Play the explosion sound
+            gameObject.SetActive(false);    // Disable the enemy
         }
 
+        // Check if the enemy collided with ammunition or repulsors
         if(col.gameObject.tag == "Ammunition" || col.gameObject.tag == "Repulsor")
         {
-            explosionParticle.Play();
-            ExplosionAudio();
-            gameObject.SetActive(false);
+            explosionParticle.Play();       // Play the explosion particle
+            ExplosionAudio();               // Play the explosion sound
+            gameObject.SetActive(false);    // Disable the enemy
         }
     }
 }
