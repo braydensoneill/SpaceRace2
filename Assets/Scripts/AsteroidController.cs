@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class AsteroidController : MonoBehaviour
 {
+    ScoreManager score;
+
     enum Direction
     {
         Forward = 0,
@@ -38,11 +40,15 @@ public class AsteroidController : MonoBehaviour
     // Variables used for particle effects
     public ParticleSystem explosionParticle;
 
+    // Collision bug fix
+    private bool isColliding;
+
     private void Awake()
     {
         // Variables for sound effects
         asteroidAudio = GetComponent<AudioSource>();
         volume = PlayerPrefs.GetFloat("volume");
+        score = FindObjectOfType<ScoreManager>();   // Used to reference the score manager
     }
     private void Start()
     {
@@ -52,6 +58,8 @@ public class AsteroidController : MonoBehaviour
 
         bounceAngle = 12.5f;                    // Set the angle that the asteroid changes when they bounce
         collisionRotationSmoothness = 1;        // Set how smooth the rotate to their new angle when they bounce
+
+        isColliding = false;
     }
 
     private void Update()
@@ -142,8 +150,11 @@ public class AsteroidController : MonoBehaviour
         // Check if the asteroid collided with an enemy
         if (col.gameObject.tag == "Enemy")
         {
+            if (isColliding) return;
+            isColliding = true;
+
             explosionParticle.Play();
-            ExplosionAudio();                   // Play an explosion sound
+            ExplosionAudio();           // Play an explosion sound
             Destroy(col.gameObject);    // Disable the collider
         }
 

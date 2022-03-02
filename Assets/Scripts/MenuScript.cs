@@ -14,8 +14,16 @@ public class MenuScript : MonoBehaviour
 
     public void Start()
     {
-        // Set the volume to the saved volume from the previous session
-        AudioListener.volume = PlayerPrefs.GetFloat("volume");
+        // Check if there is a highscore playerpref saved from previous sessions
+        if (PlayerPrefs.HasKey("volume"))
+        {
+            AudioListener.volume = PlayerPrefs.GetFloat("volume");
+        }
+        
+        // if there is no volume playerpref, set the volume to 1
+        else
+            AudioListener.volume = 1;
+
     }
 
     public void MainMenu()

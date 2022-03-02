@@ -470,7 +470,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private bool IsAlive()
+    public bool IsAlive()
     {
         // Check is the player has more than 0 health
         if (playerHealth > 0)

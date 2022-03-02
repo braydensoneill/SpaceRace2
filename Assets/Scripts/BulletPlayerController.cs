@@ -59,7 +59,7 @@ public class BulletPlayerController : MonoBehaviour
         {
             if (isColliding) return;
             isColliding = true;
-            score.AddScore(1);          // Add to the player's score
+            score.AddScore(1);          // Add to the player's score if they are still alive
             Destroy(col.gameObject);    // Destroy the collider
             Destroy(gameObject);        // Destroy the bullet
         }

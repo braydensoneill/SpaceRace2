@@ -114,14 +114,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7e7f79e5f7ca9c49ac7c0269375fdf8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 5921626693260685922}
   speed: 14
+  moveDirection: 0
   maxRangeLeft: 0
   maxRangeRight: 0
-  moveDirection: 0
-  bounceAngle: 0
   currentXAngle: 0
   currentYAngle: 0
   currentZAngle: 0
+  bounceAngle: 0
   volume: 0
   explosionSound: {fileID: 8300000, guid: fd706038486fee041947a774223dc22e, type: 3}
   explosionParticle: {fileID: 4646398998037432435}

@@ -29,14 +29,13 @@ public class ScoreManager : MonoBehaviour
         fileName = "scores.txt";
         filePath = Application.persistentDataPath + "/" + fileName;
         writer = new StreamWriter(filePath, true);
-
-        // Load the players highscore
-        LoadHighScore();
     }
 
     // Start is called before the first frame update
     void Start()
     {
+        // Load the players highscore
+        LoadHighScore();
         score = 0;  // Reset the score
     }
 
@@ -55,6 +54,10 @@ public class ScoreManager : MonoBehaviour
             highscore = PlayerPrefs.GetInt("Highscore");                // Update PlayerPref
             highScoreText.text = "Highscore: " + highscore.ToString();  // Update Text
         }
+
+        // If the player has no highscore saved, the default value is 0
+        else
+            highscore = 0;
     }
 
     public void UpdateScore()
