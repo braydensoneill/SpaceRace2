@@ -82,13 +82,13 @@ public class EnemyController : MonoBehaviour
     private void ShootAudio()
     {
         // Play the laser sound
-        enemyAudio.PlayOneShot(laserSound, volume * 1.3f);
+        enemyAudio.PlayOneShot(laserSound, volume);
     }
 
     private void ExplosionAudio()
     {
         // Play the explosion sound
-        enemyAudio.PlayOneShot(explosionSound, volume * 20f);
+        enemyAudio.PlayOneShot(explosionSound, volume);
     }
 
     private void ShootNormal()
@@ -155,24 +155,5 @@ public class EnemyController : MonoBehaviour
             return true;
         else
             return false;
-    }
-
-    private void OnTriggerEnter(Collider col)
-    {
-        // Check if the enemy collided with an asteroid
-        if(col.gameObject.tag == "Asteroid")
-        {
-            explosionParticle.Play();       // Play the explosion particle 
-            ExplosionAudio();               // Play the explosion sound
-            gameObject.SetActive(false);    // Disable the enemy
-        }
-
-        // Check if the enemy collided with ammunition or repulsors
-        if(col.gameObject.tag == "Ammunition" || col.gameObject.tag == "Repulsor")
-        {
-            explosionParticle.Play();       // Play the explosion particle
-            ExplosionAudio();               // Play the explosion sound
-            gameObject.SetActive(false);    // Disable the enemy
-        }
     }
 }

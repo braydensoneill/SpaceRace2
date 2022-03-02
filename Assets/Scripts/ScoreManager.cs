@@ -76,8 +76,6 @@ public class ScoreManager : MonoBehaviour
             highscore = score;  //Set the new highscore
 
             highScoreText.text = "Highscore: " + highscore.ToString();  //Text of highscore on gameOver screen
-
-            PlayerPrefs.SetInt("Highscore", highscore); //Save the new Highscore so it can be used after closing/restarting the game
         }
     }
 

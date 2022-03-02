@@ -108,7 +108,7 @@ public class AsteroidController : MonoBehaviour
     private void ExplosionAudio()
     {
         // Play the explosion sound
-        asteroidAudio.PlayOneShot(explosionSound, volume * 2);
+        asteroidAudio.PlayOneShot(explosionSound, volume);
     }
 
     private void CheckOutOfBounds()
@@ -127,23 +127,24 @@ public class AsteroidController : MonoBehaviour
         // Check if the asteroid collided with ammunition
         if (col.gameObject.tag == "Ammunition")
         {
-            col.gameObject.SetActive(false);    // Disable the collider
+            Destroy(col.gameObject);    // Destroy the collider
         }
 
         // Check if the asteroid collided with repulsor
         if (col.gameObject.tag == "Repulsor")
         {
-            explosionParticle.Play();           // Play an explosion particle
-            ExplosionAudio();                   // Play an explosion sound
-            gameObject.SetActive(false);        // Disable the asteroid
-            col.gameObject.SetActive(false);    // Disable the collider
+            explosionParticle.Play();   // Play an explosion particle
+            ExplosionAudio();           // Play an explosion sound
+            Destroy(col.gameObject);    // Destroy the collider
+            Destroy(gameObject);        // Destroy the asteroid
         }
 
         // Check if the asteroid collided with an enemy
         if (col.gameObject.tag == "Enemy")
         {
+            explosionParticle.Play();
             ExplosionAudio();                   // Play an explosion sound
-            col.gameObject.SetActive(false);    // Disable the collider
+            Destroy(col.gameObject);    // Disable the collider
         }
 
         // Check if the asteroid collided with a player

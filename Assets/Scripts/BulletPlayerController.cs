@@ -9,6 +9,8 @@ public class BulletPlayerController : MonoBehaviour
     private float speed;
     private float maxRange;
 
+    bool isColliding;
+
     void Awake()
     {
         score = FindObjectOfType<ScoreManager>();   // Used to reference the score manager
@@ -20,6 +22,10 @@ public class BulletPlayerController : MonoBehaviour
         maxRange = 20;  // Set the max range the bullet can travel
     }
 
+    private void Update()
+    {
+        isColliding = false;    // Collision bug Fix
+    }
     // Update is called once per frame
     void FixedUpdate()
     {
@@ -51,8 +57,11 @@ public class BulletPlayerController : MonoBehaviour
         // Check if the bullet collided with the enemy
         if (col.gameObject.tag == "Enemy")
         {
-            score.AddScore(1);      // Add to the player's score
-            Destroy(gameObject);    // Destroy the bullet
+            if (isColliding) return;
+            isColliding = true;
+            score.AddScore(1);          // Add to the player's score
+            Destroy(col.gameObject);    // Destroy the collider
+            Destroy(gameObject);        // Destroy the bullet
         }
     }
 }

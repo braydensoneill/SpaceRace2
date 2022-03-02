@@ -82,6 +82,8 @@ public class PlayerController : MonoBehaviour
     // Variables used for particle effects
     public ParticleSystem explosionParticle;
 
+    bool isColliding;
+
     private void Awake()
     {
         //Player variables
@@ -142,7 +144,8 @@ public class PlayerController : MonoBehaviour
         Shoot();                                // Allow the player to shoot
         Charge();                               // Check if enough time has passed since the last shot
         ChangeWeapon();                         // Allow the player to switch guns
-    }
+        isColliding = false;                    // Collision bug fix
+     }
 
     private void FixedUpdate()
     {
@@ -266,7 +269,7 @@ public class PlayerController : MonoBehaviour
     private void ShootAudio()
     {
         // Play a laser sound
-        playerAudio.PlayOneShot(laserSound, volume * 1.3f);
+        playerAudio.PlayOneShot(laserSound, volume);
     }
 
     private void ShootGreen()
@@ -501,12 +504,24 @@ public class PlayerController : MonoBehaviour
     private void OnTriggerEnter(Collider col)
     {
         // Check if the player collided with any ammunition or repulsors
-        if (col.gameObject.tag == "Ammunition" || col.gameObject.tag == "Repulsor")
+        if (col.gameObject.tag == "Ammunition")
         {
+            if (isColliding) return;
+            isColliding = true;
+            Destroy(col.gameObject);
+            playerHealth -= 60;       // Update the player's health
+        }
+
+        
+        if(col.gameObject.tag == "Repulsor")
+        {
+            if (isColliding) return;
+            isColliding = true;
             Destroy(col.gameObject);    // Destory collider
             playerHealth -= 60;         // Update the player's health
         }
 
+        
         // Check if the player collided with an enemy
         if (col.gameObject.tag == "Enemy")
         {
@@ -517,6 +532,7 @@ public class PlayerController : MonoBehaviour
         // Check if the player collided with an asteroid
         if (col.gameObject.tag == "Asteroid")
         {
+            Debug.Log("HELLO???");
             playerHealth = 0;   // Update the player's health
         }
 

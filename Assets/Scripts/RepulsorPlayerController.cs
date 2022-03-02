@@ -10,6 +10,8 @@ public class RepulsorPlayerController : MonoBehaviour
     private float speed;
     private float maxRange;
 
+    bool isColliding;
+
     private void Awake()
     {
         // Allows reference to ScoreManager scipt
@@ -20,6 +22,11 @@ public class RepulsorPlayerController : MonoBehaviour
     {
         speed = 30;     // Set the speed of the repulsor
         maxRange = 20;  // Set the max range of the repulsor
+    }
+
+    private void Update()
+    {
+        isColliding = false;    // Collision Bug Fix
     }
 
     // Update is called once per frame
@@ -59,8 +66,11 @@ public class RepulsorPlayerController : MonoBehaviour
         // Check if the projectile collides with an enemy
         if (col.gameObject.tag == "Enemy")
         {
+            if (isColliding) return;
+            isColliding = false;
             score.AddScore(1);          // Add to players score
             Destroy(col.gameObject);    // Destroy the collider
+            Destroy(gameObject);
         }
     }
 }
