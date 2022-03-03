@@ -125,7 +125,7 @@ public class PlayerController : MonoBehaviour
     {
         //Player Info Variables
         playerHealth = maxPlayerHealth;
-        playerSpeed = 30 * PlayerPrefs.GetFloat("sensitivity"); //Default sensitivity is 30, but is changed based on playerPref value
+        SetSpeed();
 
         //Player Weapon Variables
         currentWeapon = (int)Weapons.green;
@@ -140,6 +140,7 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         FindInputValues();                      // Find the values used for player input
+        Debug.Log("Vertical Input: " + verticalInput);
         PassiveHeal(healAmount, healFrequency); // Every x seconds, heal for x 
         Shoot();                                // Allow the player to shoot
         Charge();                               // Check if enough time has passed since the last shot
@@ -156,6 +157,19 @@ public class PlayerController : MonoBehaviour
     private void LateUpdate()
     {
         Die();  // Check of the player has dies at the end of each frame
+    }
+
+    private void SetSpeed()
+    {
+        // Check if there is a highscore playerpref saved from previous sessions
+        if (PlayerPrefs.HasKey("sensitivity"))
+        {
+            playerSpeed = 25 * PlayerPrefs.GetFloat("sensitivity"); //Default sensitivity is 30, but is changed based on playerPref value
+        }
+
+        // If the player has no highscore saved, the default value is 0
+        else
+            playerSpeed = 25;
     }
 
     public float GetPlayerHealth()
